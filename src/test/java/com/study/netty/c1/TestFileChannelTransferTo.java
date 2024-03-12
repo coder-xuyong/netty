@@ -12,9 +12,9 @@ import java.nio.channels.FileChannel;
 public class TestFileChannelTransferTo {
     public static void main(String[] args) {
         try (
-                CloseableFileInputStream fromChannel = new CloseableFileInputStream("D:\\BaiduNetdiskDownload\\黑马程序员\\黑马springcloud.zip");
+                CloseableFileInputStream fromChannel = new CloseableFileInputStream("data.txt");
                 FileChannel from = fromChannel.getChannel();
-                CloseableFileOutputStream toChannel = new CloseableFileOutputStream("to.zip");
+                CloseableFileOutputStream toChannel = new CloseableFileOutputStream("to.txt");
                 FileChannel to = toChannel.getChannel()
         ) {
             //效率高，底层会利用操作系统的零拷贝进行优化
