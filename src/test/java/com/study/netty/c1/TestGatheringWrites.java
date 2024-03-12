@@ -1,6 +1,7 @@
 package com.study.netty.c1;
 
-import java.io.RandomAccessFile;
+import com.study.netty.utils.CloseableRandomAccessFile;
+
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;

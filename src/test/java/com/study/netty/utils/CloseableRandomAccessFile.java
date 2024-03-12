@@ -1,4 +1,4 @@
-package com.study.netty.c1;
+package com.study.netty.utils;
 
 import java.io.Closeable;
 import java.io.IOException;
