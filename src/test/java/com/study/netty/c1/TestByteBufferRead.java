@@ -5,7 +5,7 @@ import java.nio.ByteBuffer;
 import static com.study.netty.c1.ByteBufferUtil.debugAll;
 
 /**
- * @author XuYong
+ * @author Xuyong
  */
 public class TestByteBufferRead {
     public static void main(String[] args) {

@@ -6,7 +6,7 @@ import java.nio.charset.StandardCharsets;
 import static com.study.netty.c1.ByteBufferUtil.debugAll;
 
 /**
- * @author XuYong
+ * @author Xuyong
  */
 public class TestByteBufferString {
     public static void main(String[] args) {

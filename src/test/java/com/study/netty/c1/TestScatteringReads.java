@@ -6,7 +6,7 @@ import java.nio.channels.FileChannel;
 import static com.study.netty.c1.ByteBufferUtil.debugAll;
 
 /**
- * @author XuYong
+ * @author Xuyong
  */
 public class TestScatteringReads {
     public static void main(String[] args) {

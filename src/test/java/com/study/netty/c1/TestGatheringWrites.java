@@ -6,7 +6,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @author XuYong
+ * @author Xuyong
  */
 public class TestGatheringWrites {
     public static void main(String[] args) {

@@ -3,7 +3,7 @@ package com.study.netty.c1;
 import java.nio.ByteBuffer;
 
 /**
- * @author XuYong
+ * @author Xuyong
  */
 public class TestByteBufferAllocate {
     public static void main(String[] args) {

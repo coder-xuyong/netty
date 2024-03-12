@@ -8,7 +8,7 @@ import static io.netty.util.internal.MathUtil.isOutOfBounds;
 import static io.netty.util.internal.StringUtil.NEWLINE;
 
 /**
- * @author XuYong
+ * @author Xuyong
  */
 public class ByteBufferUtil {
     private static final char[] BYTE2CHAR = new char[256];

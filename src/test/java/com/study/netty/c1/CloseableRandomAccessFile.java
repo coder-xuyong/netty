@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 
 /**
- * @author XuYong
+ * @author Xuyong
  */
 public class CloseableRandomAccessFile implements Closeable {
     private final RandomAccessFile file;
