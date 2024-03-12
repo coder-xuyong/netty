@@ -6,10 +6,7 @@ import java.nio.charset.StandardCharsets;
 import static com.study.netty.c1.ByteBufferUtil.debugAll;
 
 /**
- * @Description: ByteBuffer 和 String 的相互转换
- * @Author: 二爷
- * @E-mail: 1299461580@qq.com
- * @Date: 2024/3/10 16:23
+ * @author XuYong
  */
 public class TestByteBufferString {
     public static void main(String[] args) {

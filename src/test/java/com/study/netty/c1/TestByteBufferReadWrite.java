@@ -5,10 +5,7 @@ import java.nio.ByteBuffer;
 import static com.study.netty.c1.ByteBufferUtil.debugAll;
 
 /**
- * @Description: netty
- * @Author: 二爷
- * @E-mail: 1299461580@qq.com
- * @Date: 2024/3/10 15:38
+ * @author XuYong
  */
 public class TestByteBufferReadWrite {
     public static void main(String[] args) {

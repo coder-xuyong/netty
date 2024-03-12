@@ -6,10 +6,7 @@ import java.nio.ByteBuffer;
 import static com.study.netty.c1.ByteBufferUtil.debugAll;
 
 /**
- * @Description: netty
- * @Author: 二爷
- * @E-mail: 1299461580@qq.com
- * @Date: 2024/3/11 21:22
+ * @author XuYong
  */
 public class TestByteBufferExam {
 
@@ -27,7 +24,7 @@ public class TestByteBufferExam {
        */
         ByteBuffer source = ByteBuffer.allocate(32);
         source.put("hello,world\nI'm zhangsan\nHo".getBytes());
-        split2(source);
+        split(source);
         source.put("w are you?\n".getBytes());
         split2(source);
     }

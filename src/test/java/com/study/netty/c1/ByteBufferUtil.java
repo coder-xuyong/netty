@@ -8,10 +8,7 @@ import static io.netty.util.internal.MathUtil.isOutOfBounds;
 import static io.netty.util.internal.StringUtil.NEWLINE;
 
 /**
- * @Description: netty
- * @Author: 二爷
- * @E-mail: 1299461580@qq.com
- * @Date: 2024/3/10 15:35
+ * @author XuYong
  */
 public class ByteBufferUtil {
     private static final char[] BYTE2CHAR = new char[256];

@@ -1,20 +1,17 @@
 package com.study.netty.c1;
 
-import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 import static com.study.netty.c1.ByteBufferUtil.debugAll;
 
 /**
- * @Description: netty
- * @Author: 二爷
- * @E-mail: 1299461580@qq.com
- * @Date: 2024/3/11 21:13
+ * @author XuYong
  */
 public class TestScatteringReads {
     public static void main(String[] args) {
-        try (FileChannel channel = new RandomAccessFile("words.txt", "r").getChannel()) {
+        try (CloseableRandomAccessFile closeableFile = new CloseableRandomAccessFile("words.txt", "r");
+             FileChannel channel = closeableFile.getChannel()) {
             ByteBuffer b1 = ByteBuffer.allocate(3);
             ByteBuffer b2 = ByteBuffer.allocate(3);
             ByteBuffer b3 = ByteBuffer.allocate(5);
@@ -26,7 +23,7 @@ public class TestScatteringReads {
             debugAll(b2);
             debugAll(b3);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

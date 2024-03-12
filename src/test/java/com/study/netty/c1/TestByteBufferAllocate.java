@@ -3,10 +3,7 @@ package com.study.netty.c1;
 import java.nio.ByteBuffer;
 
 /**
- * @Description: netty
- * @Author: 二爷
- * @E-mail: 1299461580@qq.com
- * @Date: 2024/3/10 15:48
+ * @author XuYong
  */
 public class TestByteBufferAllocate {
     public static void main(String[] args) {
