@@ -11,6 +11,7 @@ import java.nio.channels.FileChannel;
  */
 public class TestFileChannelTransferTo {
     public static void main(String[] args) {
+        long start = System.nanoTime();
         try (
                 CloseableFileInputStream fromChannel = new CloseableFileInputStream("data.txt");
                 FileChannel from = fromChannel.getChannel();
@@ -27,6 +28,8 @@ public class TestFileChannelTransferTo {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        long end = System.nanoTime();
+        System.out.println("transferTo 用时：" + (end - start) / 1000_000.0 +" ms");
     }
 }
 
