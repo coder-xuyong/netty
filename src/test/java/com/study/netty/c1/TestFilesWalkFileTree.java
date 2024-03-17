@@ -9,7 +9,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Xuyong
  */
 public class TestFilesWalkFileTree {
+
     public static void main(String[] args) throws IOException {
+        AtomicInteger jarCount = new AtomicInteger();
+        Files.walkFileTree(Paths.get("D:\\BaiduNetdiskDownload"),new SimpleFileVisitor<Path>(){
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                if (file.toString().endsWith(".jar")) {
+                    System.out.println(file);
+                    jarCount.incrementAndGet();
+                }
+                return super.visitFile(file, attrs);
+            }
+        });
+        System.out.println(jarCount);
+    }
+    public static void m1(String[] args) throws IOException {
         AtomicInteger dirCount = new AtomicInteger();
         AtomicInteger fileCount = new AtomicInteger();
         long start = System.currentTimeMillis();
