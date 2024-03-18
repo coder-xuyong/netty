@@ -45,18 +45,21 @@ public class Server {
                     log.debug("key: {}", key);
                     // 5. 区分事件类型
                     if (key.isAcceptable()) { // 如果是 accept
-                        ServerSocketChannel channel = (ServerSocketChannel) key.channel();
-                        SocketChannel sc = channel.accept();
-                        sc.configureBlocking(false);
-                        ByteBuffer buffer = ByteBuffer.allocate(16); // attachment
-                        // 将一个 byteBuffer 作为附件关联到 selectionKey 上
-                        SelectionKey scKey = sc.register(selector, 0, buffer);
-                        scKey.interestOps(SelectionKey.OP_READ);
-                        log.debug("{}", sc);
-                        log.debug("scKey:{}", scKey);
+                        try(ServerSocketChannel channel = (ServerSocketChannel) key.channel()){
+                            SocketChannel sc = channel.accept();
+                            sc.configureBlocking(false);
+                            ByteBuffer buffer = ByteBuffer.allocate(16); // attachment
+                            // 将一个 byteBuffer 作为附件关联到 selectionKey 上
+                            SelectionKey scKey = sc.register(selector, 0, buffer);
+                            scKey.interestOps(SelectionKey.OP_READ);
+                            log.debug("{}", sc);
+                            log.debug("scKey:{}", scKey);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                     } else if (key.isReadable()) { // 如果是 read
-//                        try {
-                            SocketChannel channel = (SocketChannel) key.channel(); // 拿到触发事件的channel
+                        // 拿到触发事件的channel
+                        try (SocketChannel channel = (SocketChannel) key.channel()){
                             // 获取 selectionKey 上关联的附件
                             ByteBuffer buffer = (ByteBuffer) key.attachment();
                             int read = channel.read(buffer); // 如果是正常断开，read 的方法的返回值是 -1
@@ -73,10 +76,10 @@ public class Server {
                                 }
                             }
 
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                            key.cancel();  // 因为客户端断开了,因此需要将 key 取消（从 selector 的 keys 集合中真正删除 key）
-//                        }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            key.cancel();  // 因为客户端断开了,因此需要将 key 取消（从 selector 的 keys 集合中真正删除 key）
+                        }
                     }
                 }
             }
