@@ -1,4 +1,4 @@
-package com.study.netty.c1;
+package com.study.netty.c3;
 
 import com.study.netty.utils.CloseableFileInputStream;
 import com.study.netty.utils.CloseableFileOutputStream;

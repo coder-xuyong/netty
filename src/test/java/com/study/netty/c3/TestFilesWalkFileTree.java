@@ -1,4 +1,4 @@
-package com.study.netty.c1;
+package com.study.netty.c3;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -11,8 +11,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class TestFilesWalkFileTree {
 
     public static void main(String[] args) throws IOException {
+//        Files.delete(Paths.get("D:\\Snipaste-1.16.2-x64 - 副本"));
+        Files.walkFileTree(Paths.get("D:\\Snipaste-1.16.2-x64 - 副本"), new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file);
+                return super.visitFile(file, attrs);
+            }
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                Files.delete(dir);
+                return super.postVisitDirectory(dir, exc);
+            }
+        });
+    }
+
+    private static void m2() throws IOException {
         AtomicInteger jarCount = new AtomicInteger();
-        Files.walkFileTree(Paths.get("D:\\BaiduNetdiskDownload"),new SimpleFileVisitor<Path>(){
+        Files.walkFileTree(Paths.get("C:\\Program Files\\Java\\jdk1.8.0_91"), new SimpleFileVisitor<Path>(){
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 if (file.toString().endsWith(".jar")) {
@@ -22,7 +38,7 @@ public class TestFilesWalkFileTree {
                 return super.visitFile(file, attrs);
             }
         });
-        System.out.println(jarCount);
+        System.out.println("jar count:" +jarCount);
     }
     public static void m1(String[] args) throws IOException {
         AtomicInteger dirCount = new AtomicInteger();

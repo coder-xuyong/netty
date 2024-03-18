@@ -1,9 +1,9 @@
-package com.study.netty.c1;
+package com.study.netty.c2;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-import static com.study.netty.c1.ByteBufferUtil.debugAll;
+import static com.study.netty.c2.ByteBufferUtil.debugAll;
 
 /**
  * @author Xuyong

@@ -1,4 +1,4 @@
-package com.study.netty.c1;
+package com.study.netty.c2;
 
 import io.netty.util.internal.StringUtil;
 

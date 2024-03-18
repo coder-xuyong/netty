@@ -1,11 +1,11 @@
-package com.study.netty.c1;
+package com.study.netty.c2;
 
 import com.study.netty.utils.CloseableRandomAccessFile;
 
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-import static com.study.netty.c1.ByteBufferUtil.debugAll;
+import static com.study.netty.c2.ByteBufferUtil.debugAll;
 
 /**
  * @author Xuyong
