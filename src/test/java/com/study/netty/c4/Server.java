@@ -52,7 +52,6 @@ public class Server {
                             // 将一个 byteBuffer 作为附件关联到 selectionKey 上
                             SelectionKey scKey = sc.register(selector, 0, buffer);
                             scKey.interestOps(SelectionKey.OP_READ);
-                            log.debug("{}", sc);
                             log.debug("scKey:{}", scKey);
                         }catch (Exception e){
                             e.printStackTrace();

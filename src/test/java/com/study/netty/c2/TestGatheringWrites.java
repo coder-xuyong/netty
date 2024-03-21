@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class TestGatheringWrites {
     public static void main(String[] args) {
+        System.out.println(StandardCharsets.UTF_8);
         ByteBuffer b1 = StandardCharsets.UTF_8.encode("hello");
         ByteBuffer b2 = StandardCharsets.UTF_8.encode("world");
         ByteBuffer b3 = StandardCharsets.UTF_8.encode("你好");
