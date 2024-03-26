@@ -4,10 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -65,6 +67,7 @@ public class Server {
                             if (read == -1) {
                                 key.cancel();
                             } else {
+                                System.out.println(Charset.defaultCharset().decode(buffer));
                                 split(buffer);
                                 // 需要扩容
                                 if (buffer.position() == buffer.limit()) {
@@ -73,6 +76,8 @@ public class Server {
                                     newBuffer.put(buffer); // 0123456789abcdef3333\n
                                     key.attach(newBuffer);
                                 }
+                                String decode = Charset.defaultCharset().decode(buffer).toString();
+                                System.out.println(decode);
                             }
 
                         } catch (Exception e) {
