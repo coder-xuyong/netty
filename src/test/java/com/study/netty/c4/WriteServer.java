@@ -13,14 +13,11 @@ import java.util.Iterator;
  */
 public class WriteServer {
     public static void main(String[] args) {
-        try (ServerSocketChannel ssc = ServerSocketChannel.open()) {
+        try (Selector selector = Selector.open();
+             ServerSocketChannel ssc = ServerSocketChannel.open()) {
             ssc.configureBlocking(false);
-
-
-            Selector selector = Selector.open();
             ssc.register(selector, SelectionKey.OP_ACCEPT);
-
-            ssc.bind(new InetSocketAddress(8080));
+            ssc.bind(new InetSocketAddress(10087));
 
             while (true) {
                 selector.select();
@@ -36,7 +33,7 @@ public class WriteServer {
                         scKey.interestOps(SelectionKey.OP_READ);
                         //1.向客户端发送大量数据
                         StringBuffer sb = new StringBuffer();
-                        for (int i = 0; i < 300000000; i++) {
+                        for (int i = 0; i < 30000000; i++) {
                             sb.append("a");
                         }
                         ByteBuffer buffer = Charset.defaultCharset().encode(sb.toString());
@@ -60,7 +57,7 @@ public class WriteServer {
                         System.out.println(write);
 
                         //6.清理操作
-                        if (!buffer.hasRemaining()){
+                        if (!buffer.hasRemaining()) {
                             //需要清楚buffer，新关联一个null，可以把上一次关注的取消
                             key.attach(null);
                             //不需要继续关注write事件
