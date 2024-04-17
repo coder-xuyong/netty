@@ -131,7 +131,7 @@ public class ChannelDemo7 {
                                 } else {
                                     buffer.flip();
                                     log.debug("{} message:", sc.getRemoteAddress());
-                                    debugAll(buffer);
+//                                    debugAll(buffer);
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
