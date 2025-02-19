@@ -20,8 +20,11 @@ import static com.study.netty.c2.ByteBufferUtil.debugRead;
 @Slf4j
 public class Server {
 
-
     public static void main(String[] args) {
+        m1(new String[]{"123"});
+    }
+
+    public static void m4(String[] args) {
         // 1. 创建 selector, 管理多个 channel
         try (Selector selector = Selector.open();
              ServerSocketChannel ssc = ServerSocketChannel.open()) {

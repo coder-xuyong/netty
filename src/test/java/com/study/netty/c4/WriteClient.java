@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class WriteClient {
     public static void main(String[] args) {
         try (SocketChannel sc = SocketChannel.open()) {
-            sc.connect(new InetSocketAddress("localhost", 8080));
+            sc.connect(new InetSocketAddress("localhost", 10087));
 //            while (true){
 //                sc.write(StandardCharsets.UTF_8.encode("hello"));
 //                Thread.sleep(3000);
