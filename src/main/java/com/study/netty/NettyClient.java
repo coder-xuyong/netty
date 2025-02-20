@@ -24,7 +24,7 @@ public class NettyClient {
     /**
      * 最大重连间隔
      */
-    private final static int MAX_RETRY = 5;
+    private final static int MAX_RETRY = 3;
     private final EventLoopGroup clientGroup = new NioEventLoopGroup();
     protected Channel channel = null;
     Bootstrap bootstrap = new Bootstrap();
@@ -56,9 +56,7 @@ public class NettyClient {
         channelFuture.addListener(future -> {
             if (future.isSuccess()) {
                 channel = ((ChannelFuture) future).channel();
-                log.info("连接成功");
-//                channel.writeAndFlush("hello world!");
-//                clientGroup.shutdownGracefully();
+                log.info("连接成功,开始执行任务。");
                 startTask(channel);
             } else if (retry == 0) {
                 log.error("重试次数已用完，放弃连接！");
