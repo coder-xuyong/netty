@@ -1,45 +1,61 @@
 package com.study.netty;
 
-import com.study.netty.handler.LifeCycleHandler;
+import com.study.netty.handler.ServerMessageHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author xuyong
  */
+@Slf4j
 public class NettyServer {
 
-    public static void main(String[] args) {
-        new NettyServer();
-    }
-
+    private final ServerBootstrap serverBootstrap = new ServerBootstrap();
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup(2);
     public NettyServer() {
-        new ServerBootstrap()
-                .group(new NioEventLoopGroup())
+        serverBootstrap
+                .group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new LoggingHandler(LogLevel.DEBUG));
-                        ch.pipeline().addLast(new StringDecoder());
-//                        ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
-//                            @Override
-//                            protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-//                                System.out.println(msg);
-//                            }
-//                        });
-                        ch.pipeline().addLast(new LifeCycleHandler());
-
+                        // netty 自带日志的 handler
+                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
+                        ch.pipeline().addLast(new ServerMessageHandler());
+//                        ch.pipeline().addLast(new LifeCycleHandler());
                     }
-                })
-                .bind(8080);
+                });
+    }
+
+    public static void main(String[] args) {
+        NettyServer nettyServer = new NettyServer();
+        nettyServer.start(1314);
+    }
+
+    public void start(int port) {
+        ChannelFuture channelFuture = serverBootstrap.bind(port);
+        channelFuture.addListener(future -> {
+            if (future.isSuccess()) {
+                log.info("端口[\" + {} + \"]绑定成功", port);
+            } else {
+                log.error("端口[\" + {} + \"]绑定异常!", port);
+            }
+        });
+        try {
+            // 阻塞在此处，直到绑定端口完成
+            channelFuture.sync();
+        } catch (InterruptedException e) {
+            log.error(e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
