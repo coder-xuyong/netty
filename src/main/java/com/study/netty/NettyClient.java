@@ -1,6 +1,7 @@
 package com.study.netty;
 
 import com.study.netty.handler.ClientMessageHandler;
+import com.study.netty.handler.HeartbeatClientHandler;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -8,8 +9,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,10 +24,10 @@ public class NettyClient {
     /**
      * 最大重连间隔
      */
-    private final static int MAX_RETRY = 3;
+    public final static int MAX_RETRY = 5;
     private final EventLoopGroup clientGroup = new NioEventLoopGroup();
-    protected Channel channel = null;
-    Bootstrap bootstrap = new Bootstrap();
+    private Channel channel = null;
+    private Bootstrap bootstrap = new Bootstrap();
 
     public NettyClient() {
         bootstrap
@@ -36,9 +36,12 @@ public class NettyClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
-                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
+//                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
                         // 取代 StringEncoder，方便自定义内容
                         ch.pipeline().addLast(new ClientMessageHandler());
+                        // 当一定周期内(默认50s)没有收到对方任何消息时，需要主动关闭链接
+                        ch.pipeline().addLast(new IdleStateHandler(0, 10, 0, TimeUnit.SECONDS));
+                        ch.pipeline().addLast(new HeartbeatClientHandler());
                     }
                 });
     }
@@ -46,8 +49,7 @@ public class NettyClient {
     public static void main(String[] args) throws InterruptedException {
         String serverIp = "127.0.0.1";
         int serverPort = 1314;
-        NettyClient nettyClient = new NettyClient();
-        nettyClient.start(serverIp, serverPort, NettyClient.MAX_RETRY);
+        new NettyClient().start(serverIp, serverPort, NettyClient.MAX_RETRY);
     }
 
     public void start(String host, int port, int retry) throws InterruptedException {
@@ -57,7 +59,7 @@ public class NettyClient {
             if (future.isSuccess()) {
                 channel = ((ChannelFuture) future).channel();
                 log.info("连接成功,开始执行任务。");
-                startTask(channel);
+//                startTask(channel);
             } else if (retry == 0) {
                 log.error("重试次数已用完，放弃连接！");
             } else {
@@ -87,7 +89,7 @@ public class NettyClient {
 
     private void startTask(@NonNull Channel channel) {
         channel.writeAndFlush("hello world");
-        clientGroup.shutdownGracefully();
+//        clientGroup.shutdownGracefully();
 //        new Thread(() -> {
 //            while (!Thread.interrupted() && isActive()) {
 //                channel.writeAndFlush("hello world");

@@ -1,5 +1,6 @@
 package com.study.netty;
 
+import com.study.netty.handler.HeartbeatServerHandler;
 import com.study.netty.handler.ServerMessageHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -10,7 +11,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author xuyong
@@ -29,9 +33,11 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         // netty 自带日志的 handler
-                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
+//                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
                         ch.pipeline().addLast(new ServerMessageHandler());
 //                        ch.pipeline().addLast(new LifeCycleHandler());
+                        ch.pipeline().addLast(new IdleStateHandler(15,0,20, TimeUnit.SECONDS));
+                        ch.pipeline().addLast(new HeartbeatServerHandler());
                     }
                 });
     }
@@ -45,9 +51,9 @@ public class NettyServer {
         ChannelFuture channelFuture = serverBootstrap.bind(port);
         channelFuture.addListener(future -> {
             if (future.isSuccess()) {
-                log.info("端口[\" + {} + \"]绑定成功", port);
+                log.info("端口[{}]绑定成功", port);
             } else {
-                log.error("端口[\" + {} + \"]绑定异常!", port);
+                log.error("端口[{}]绑定异常!", port);
             }
         });
         try {

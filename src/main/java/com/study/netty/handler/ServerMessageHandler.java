@@ -29,7 +29,7 @@ public class ServerMessageHandler extends MessageToMessageDecoder<ByteBuf> {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) throws Exception {
+    protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) {
         log.info("server 收到了 {}",msg.toString(this.charset));
         out.add(msg.toString(this.charset));
     }
