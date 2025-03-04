@@ -1,9 +1,12 @@
 package com.study.netty.handler;
 
+import com.study.netty.packet.HeartbeatRequest;
+import com.study.netty.packet.HeartbeatResponse;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.util.ReferenceCountUtil;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,6 +36,20 @@ public class HeartbeatServerHandler extends ChannelInboundHandlerAdapter {
                 default:
                     break;
             }
+        }
+    }
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+        if (msg instanceof HeartbeatRequest) {
+            log.info("[SERVER] 收到心跳，reqId:{}", ((HeartbeatRequest) msg).getReqId());
+            HeartbeatResponse response = new HeartbeatResponse(((HeartbeatRequest) msg).getReqId());
+            response.setType(4);
+            ctx.writeAndFlush(response);
+            // 心跳消息无需传递到业务处理器
+            ReferenceCountUtil.release(msg);
+        }else {
+            // 非心跳消息传递给后续 Handler（如 ServerBusinessHandler）
+            ctx.fireChannelRead(msg);
         }
     }
 }

@@ -1,7 +1,9 @@
 package com.study.netty;
 
+import com.study.netty.handler.ClientBusinessHandler;
 import com.study.netty.handler.ClientMessageHandler;
 import com.study.netty.handler.HeartbeatClientHandler;
+import com.study.netty.handler.ProtocolCodec;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -9,6 +11,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +41,14 @@ public class NettyClient {
                     protected void initChannel(Channel ch) {
 //                        ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO));
                         // 取代 StringEncoder，方便自定义内容
-                        ch.pipeline().addLast(new ClientMessageHandler());
+//                        ch.pipeline().addLast(new ClientMessageHandler());
+                        // 处理粘包/拆包（最大长度10MB）
+                        ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(10 * 1024 * 1024, 0, 4, 0, 0));
+                        ch.pipeline().addLast(new ProtocolCodec());
                         // 当一定周期内(默认50s)没有收到对方任何消息时，需要主动关闭链接
                         ch.pipeline().addLast(new IdleStateHandler(0, 10, 0, TimeUnit.SECONDS));
                         ch.pipeline().addLast(new HeartbeatClientHandler());
+                        ch.pipeline().addLast(new ClientBusinessHandler());
                     }
                 });
     }
@@ -58,7 +65,7 @@ public class NettyClient {
         channelFuture.addListener(future -> {
             if (future.isSuccess()) {
                 channel = ((ChannelFuture) future).channel();
-                log.info("连接成功,开始执行任务。");
+                log.info("连接成功");
 //                startTask(channel);
             } else if (retry == 0) {
                 log.error("重试次数已用完，放弃连接！");
@@ -78,6 +85,7 @@ public class NettyClient {
                 }, delay, TimeUnit.SECONDS);
             }
         });
+        channelFuture.sync();
     }
 
     public boolean isActive() {
