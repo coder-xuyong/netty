@@ -11,6 +11,7 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -27,11 +28,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Test {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // 内部创建了两个 EventLoop, 每个 EventLoop 维护一个线程
-        DefaultEventLoopGroup group = new DefaultEventLoopGroup(2);
-        System.out.println(group.next());
-        System.out.println(group.next());
-        System.out.println(group.next());
+//        DefaultEventLoopGroup group = new DefaultEventLoopGroup(2);
+//        System.out.println(group.next());
+//        System.out.println(group.next());
+//        System.out.println(group.next());
+        String pathname = "D:\\aaa.txt";
+        File file1 = new File(pathname);
+        boolean exists = file1.exists();
+        System.out.println(exists);
+        file1.createNewFile();
+        boolean exists2 = file1.exists();
+        System.out.println(exists2);
     }
 }
